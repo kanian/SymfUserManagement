@@ -14,6 +14,10 @@ class UserDTO
     public $name;
     public $createdAt;
     public $updatedAt;
+    public $username;
+    public $id;
+    public $roles;
+    
     public static $className = 'App\DTO\UserDTO';
 
     /**
@@ -29,7 +33,7 @@ class UserDTO
             $this->createdAt = $user->getCreatedAt();
             $this->updatedAt = $user->getUpdatedAt();
             $this->id = $user->getId();
-            $this->ussername = $user->getUsername();
+            $this->username = $user->getUsername();
             $this->roles = $user->getRoles();
         }
 
