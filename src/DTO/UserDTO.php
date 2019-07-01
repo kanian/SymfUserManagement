@@ -29,6 +29,8 @@ class UserDTO
             $this->createdAt = $user->getCreatedAt();
             $this->updatedAt = $user->getUpdatedAt();
             $this->id = $user->getId();
+            $this->ussername = $user->getUsername();
+            $this->roles = $user->getRoles();
         }
 
     }
