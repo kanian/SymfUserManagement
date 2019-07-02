@@ -2,15 +2,17 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
  */
 class Group
 {
+    use EntityTimestamps;
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -29,7 +31,7 @@ class Group
     private $description;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\User", inversedBy="groups")
+     * @ORM\ManyToMany(targetEntity="App\Entity\User")
      */
     private $users;
 

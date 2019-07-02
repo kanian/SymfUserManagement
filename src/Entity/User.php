@@ -41,14 +41,16 @@ class User implements UserInterface
      */
     private $name;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Group", mappedBy="users")
+     /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Group", inversedBy="users")
      */
     private $groups;
+   
 
     public function __construct()
     {
         $this->groups = new ArrayCollection();
+
     }
 
     public function getId(): ?int
@@ -78,16 +80,9 @@ class User implements UserInterface
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
+    public function getRoles(): ?array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
-
-        return array_unique($roles);
+        return $this->roles;
     }
 
     public function setRoles(array $roles): self
@@ -97,12 +92,9 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
-        return (string) $this->password;
+        return $this->password;
     }
 
     public function setPassword(string $password): self
@@ -153,7 +145,6 @@ class User implements UserInterface
     {
         if (!$this->groups->contains($group)) {
             $this->groups[] = $group;
-            $group->addUser($this);
         }
 
         return $this;
@@ -163,9 +154,10 @@ class User implements UserInterface
     {
         if ($this->groups->contains($group)) {
             $this->groups->removeElement($group);
-            $group->removeUser($this);
         }
 
         return $this;
     }
+
+   
 }
