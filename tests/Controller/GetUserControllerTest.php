@@ -13,7 +13,7 @@ class GetUserControllerTest extends WebTestCase
         $client = static::createClient();
         $dotenv = new Dotenv();
         $dotenv->load(__DIR__ . '/../../.env.test');
-        $base_uri = $_ENV['BASE_URI'];
+        $base_uri = array_key_exists('BASE_URI',$_ENV) ? $_ENV['BASE_URI'] : '';
         $client->request('GET', $base_uri . '/users');
 
         $this->assertEquals(200, $client->getResponse()->getStatusCode());

@@ -13,7 +13,7 @@ class DeleteUserControllerTest extends WebTestCase
         $client = static::createClient();
         $dotenv = new Dotenv();
         $dotenv->load(__DIR__ . '/../../.env.test');
-        $base_uri = $_ENV['BASE_URI'];
+        $base_uri = array_key_exists('BASE_URI',$_ENV) ? $_ENV['BASE_URI'] : '';
         $client->request(
             'DELETE', 
             $base_uri . '/users/1',
