@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
-use App\DomainService\GroupDomainService;
 use App\Entity\Group;
+use App\DomainService\UserDomainService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\DomainService\GroupDomainService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class GroupController extends AbstractController
 {
@@ -86,10 +87,10 @@ class GroupController extends AbstractController
     /**
      * @Route("/groups/{groupId}/users/{userId}", methods={"PUT"})
      */
-    public function assignUserToGroup(string $groupId, string $userId)
+    public function assignUserToGroup(string $groupId, string $userId , UserDomainService $userDomainService)
     {
 
-        $assigned = $this->domainService->assignUserToGroup($groupId, $userId);
+        $assigned = $this->domainService->assignUserToGroup($groupId, $userId, $userDomainService);
 
         if ($assigned === GroupDomainService::DOMAIN_OBJECT_NOT_FOUND) {
             return new JsonResponse(["error_human" => "Not found",
@@ -109,10 +110,10 @@ class GroupController extends AbstractController
     /**
      * @Route("/groups/{groupId}/users/{userId}", methods={"DELETE"})
      */
-    public function removeUserFromGroup(string $groupId, string $userId)
+    public function removeUserFromGroup(string $groupId, string $userId, UserDomainService $userDomainService)
     {
 
-        $removed = $this->domainService->removeUserFromGroup($groupId, $userId);
+        $removed = $this->domainService->removeUserFromGroup($groupId, $userId, $userDomainService);
 
         if ($removed === GroupDomainService::DOMAIN_OBJECT_NOT_FOUND) {
             return new JsonResponse(["error_human" => "Not found",

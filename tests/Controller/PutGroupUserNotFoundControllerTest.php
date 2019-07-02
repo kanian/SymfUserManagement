@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class PutGroupUserNotFoundControllerTest extends WebTestCase
 {
+    
     public function testCreate()
     {
         $client = static::createClient();

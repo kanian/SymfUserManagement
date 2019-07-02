@@ -41,11 +41,10 @@ class User implements UserInterface
      */
     private $name;
 
-     /**
+    /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Group", inversedBy="users")
      */
     private $groups;
-   
 
     public function __construct()
     {
@@ -82,12 +81,22 @@ class User implements UserInterface
 
     public function getRoles(): ?array
     {
-        return $this->roles;
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
     }
 
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->roles[] = $role;
 
         return $this;
     }
@@ -159,5 +168,4 @@ class User implements UserInterface
         return $this;
     }
 
-   
 }

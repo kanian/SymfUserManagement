@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
-use App\DomainService\UserDomainService;
 use App\Entity\User;
+use App\DomainService\UserDomainService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
 {
@@ -44,11 +45,11 @@ class UserController extends AbstractController
     /**
      * @Route("/users", methods={"POST"})
      */
-    public function create(Request $request)
+    public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         $body = json_decode(
             $request->getContent());
-        $dto = $this->domainService->create($body);
+        $dto = $this->domainService->create($body, $passwordEncoder);
         return new JsonResponse(['data' => $dto], JsonResponse::HTTP_CREATED);
     }
 
