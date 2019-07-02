@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 /**
+ * @ORM\Table(name="groups")
  * @ORM\Entity(repositoryClass="App\Repository\GroupRepository")
  */
 class Group
