@@ -31,7 +31,7 @@ class GroupDTO extends DTO
             $this->updatedAt = $group->getUpdatedAt();
             $this->id = $group->getId();
             $userDTOMapper = new UserDTO;
-            $this->users = $userDTOMapper->mapArrayToDTOArray( $group->getUsers());;
+            $this->users = $userDTOMapper->mapArrayToDTOArray( $group->getUsers()->getValues());
         }
     }
 }
