@@ -5,11 +5,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/login", name="login", methods={"POST"})
+     * @Route("/login", name="app_login", methods={"POST"})
      */
     public function login(Request $request)
     {
@@ -19,5 +18,22 @@ class SecurityController extends AbstractController
             'username' => $user->getUsername(),
             'roles' => $user->getRoles(),
         ]);
+    }
+
+    /**
+     * @Route("/logout", name="app_logout", methods={"GET"})
+     */
+    public function logout()
+    {
+        // controller can be blank: it will never be executed!
+        throw new \Exception('Don\'t forget to activate logout in security.yaml');
+    }
+
+    /**
+     * @Route("/", name="blackhole", methods={"GET"})
+     */
+    public function blackHole()
+    {
+        return $this->json(null);
     }
 }
