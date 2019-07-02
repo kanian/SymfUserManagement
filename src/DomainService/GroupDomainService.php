@@ -35,7 +35,7 @@ class GroupDomainService extends DomainService
         }
         !empty($data->name) ? $group->setName($data->name) : null;
         $group->setUpdatedAt(new DateTime("now"));
-        !empty($data->description) ? $group->setEmail($data->description) : null;
+        !empty($data->description) ? $group->setDescription($data->description) : null;
         $this->entityManager->flush();
         return new GroupDTO($group);
     }
