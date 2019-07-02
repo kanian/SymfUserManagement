@@ -105,5 +105,25 @@ class GroupController extends AbstractController
             JsonResponse::HTTP_OK);
     }
 
+
+    /**
+     * @Route("/groups/{groupId}/users/{userId}", methods={"DELETE"})
+     */
+    public function removeUserFromGroup(string $groupId, string $userId)
+    {
+
+        $removed = $this->domainService->removeUserFromGroup($groupId, $userId);
+
+        if ($removed === GroupDomainService::DOMAIN_OBJECT_NOT_FOUND) {
+            return new JsonResponse(["error_human" => "Not found",
+                "error_code" => "not_found",
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } else if ($removed === GroupDomainService::ACTION_FAILED) {
+            return new JsonResponse(["error_human" => "Action failed",
+                "error_code" => "action_failed",
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        return new JsonResponse(["data" => []], JsonResponse::HTTP_OK);
+    }
    
 }
