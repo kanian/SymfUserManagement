@@ -2,24 +2,30 @@
 
 namespace App\DTO;
 
-trait DTO
+use Closure;
+
+class DTO
 {
-    public static function mapToDTO($entity = null)
+    protected $className;
+
+    public function mapToDTO($entity = null)
     {
         if (!$entity) {
             return null;
         }
-        $dto = new self::$className($entity);
+        $dto = new $this->className($entity);
         $dto->entity = $entity;
         return $dto;
     }
 
-    public static function mapArrayToDTOArray(array $entities)
+    public function mapArrayToDTOArray(array $entities)
     {
-        return array_map(function ($entity) {return self::mapToDTO($entity);}, $entities);
+        $mapper = Closure::bind(function ($entity){return $this->mapToDTO($entity);}, $this);
+        return array_map($mapper, $entities);
     }
 
-    public function getEntity(){
+    public function getEntity()
+    {
         return $this->entity;
     }
 

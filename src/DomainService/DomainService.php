@@ -24,7 +24,9 @@ class DomainService
 
     function list() {
         $entities = $this->entityManager->getRepository($this->entityClassName)->findAll();
-        return $this->dtoClassName::mapArrayToDTOArray($entities);
+        $dtoMapper = new $this->dtoClassName;
+        $dtos = $dtoMapper->mapArrayToDTOArray($entities);
+        return $dtos;
     }
 
     public function retrieve(string $id)

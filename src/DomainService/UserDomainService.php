@@ -21,6 +21,8 @@ class UserDomainService extends DomainService
         $user = new User();
         $user->setName($data->name);
         $user->setCreatedAt(new DateTime("now"));
+        $user->setEmail($data->email);
+        $user->setPassword($data->password);
         $this->entityManager->persist($user);
         $this->entityManager->flush();
         return new UserDTO($user);
@@ -32,8 +34,9 @@ class UserDomainService extends DomainService
         if (!$user) {
             return null;
         }
-        $user->setName($data->name);
+        !empty($data->name) ? $user->setName($data->name) : null;
         $user->setUpdatedAt(new DateTime("now"));
+        !empty($data->email) ? $user->setEmail($data->email) : null;
         $this->entityManager->flush();
         return new UserDTO($user);
     }

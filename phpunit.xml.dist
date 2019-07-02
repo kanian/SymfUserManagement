@@ -6,7 +6,6 @@
          backupGlobals="false"
          colors="true"
          bootstrap="config/bootstrap.php"
-         verbose="true"
 >
     <php>
         <ini name="error_reporting" value="-1" />
@@ -24,14 +23,11 @@
 
   
     <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+        <whitelist >
             <directory suffix=".php">./src</directory>
         </whitelist>
     </filter>
 
-    <logging>
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
-    </logging>
 
     <listeners>
         <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener" />
