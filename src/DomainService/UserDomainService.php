@@ -2,11 +2,12 @@
 
 namespace App\DomainService;
 
-use App\DomainService\DomainService;
+use DateTime;
 use App\DTO\UserDTO;
 use App\Entity\User;
-use DateTime;
+use App\DomainService\DomainService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserDomainService extends DomainService
 {
@@ -16,13 +17,16 @@ class UserDomainService extends DomainService
         parent::__construct($entityManager, User::class);
     }
 
-    public function create($data)
+    public function create($data, UserPasswordEncoderInterface $passwordEncoder)
     {
         $user = new User();
         $user->setName($data->name);
         $user->setCreatedAt(new DateTime("now"));
         $user->setEmail($data->email);
-        $user->setPassword($data->password);
+        $user->setPassword($passwordEncoder->encodePassword(
+            $user,
+            $data->password
+        ));
         $this->entityManager->persist($user);
         $this->entityManager->flush();
         return new UserDTO($user);
