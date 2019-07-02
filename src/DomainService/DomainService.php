@@ -32,7 +32,8 @@ class DomainService
     public function retrieve(string $id)
     {
         $entity = $this->entityManager->getRepository($this->entityClassName)->find($id);
-        return $this->dtoClassName::mapToDTO($entity);
+        $dtoMapper = new $this->dtoClassName;
+        return $dtoMapper->mapToDTO($entity);
     }
 
 

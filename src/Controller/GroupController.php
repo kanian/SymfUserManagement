@@ -83,5 +83,27 @@ class GroupController extends AbstractController
         return new JsonResponse([], JsonResponse::HTTP_OK);
     }
 
+    /**
+     * @Route("/groups/{groupId}/users/{userId}", methods={"PUT"})
+     */
+    public function assignUserToGroup(string $groupId, string $userId)
+    {
+
+        $assigned = $this->domainService->assignUserToGroup($groupId, $userId);
+
+        if ($assigned === GroupDomainService::DOMAIN_OBJECT_NOT_FOUND) {
+            return new JsonResponse(["error_human" => "Not found",
+                "error_code" => "not_found",
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } else if ($assigned === GroupDomainService::ACTION_FAILED) {
+            return new JsonResponse(["error_human" => "Action failed",
+                "error_code" => "action_failed",
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        return new JsonResponse(
+            ["data" => ["assigned" => $assigned, "groupId" => $groupId, "userId" => $userId]],
+            JsonResponse::HTTP_OK);
+    }
+
    
 }

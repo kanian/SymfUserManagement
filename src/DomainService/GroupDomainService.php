@@ -40,4 +40,21 @@ class GroupDomainService extends DomainService
         return new GroupDTO($group);
     }
 
+    public function assignUserToGroup(string $groupId, string $userId)
+    {
+        $userDomainService = new UserDomainService($this->entityManager);
+        $user = $userDomainService->retrieve($userId);
+        $group = $this->entityManager->getRepository(Group::class)->find($groupId);
+
+        if (!$group || !$user) {
+            return self::DOMAIN_OBJECT_NOT_FOUND;
+        }
+
+        if ($group->addUser($user->getEntity())) {
+            $this->entityManager->flush();
+            return self::ACTION_SUCCEEDED;
+        }
+        return self::ACTION_FAILED;
+    }
+
 }
