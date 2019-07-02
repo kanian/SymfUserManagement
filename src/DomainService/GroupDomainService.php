@@ -2,10 +2,11 @@
 
 namespace App\DomainService;
 
-use App\DomainService\DomainService;
+use DateTime;
 use App\DTO\GroupDTO;
 use App\Entity\Group;
-use DateTime;
+use App\DomainService\DomainService;
+use App\DomainService\UserDomainService;
 use Doctrine\ORM\EntityManagerInterface;
 
 class GroupDomainService extends DomainService
@@ -40,9 +41,8 @@ class GroupDomainService extends DomainService
         return new GroupDTO($group);
     }
 
-    public function assignUserToGroup(string $groupId, string $userId)
+    public function assignUserToGroup(string $groupId, string $userId, UserDomainService $userDomainService )
     {
-        $userDomainService = new UserDomainService($this->entityManager);
         $user = $userDomainService->retrieve($userId);
         $group = $this->entityManager->getRepository(Group::class)->find($groupId);
 
@@ -57,9 +57,8 @@ class GroupDomainService extends DomainService
         return self::ACTION_FAILED;
     }
 
-    public function removeUserFromGroup(string $groupId, string $userId)
+    public function removeUserFromGroup(string $groupId, string $userId, UserDomainService $userDomainService)
     {
-        $userDomainService = new UserDomainService($this->entityManager);
         $user = $userDomainService->retrieve($userId);
         $group = $this->entityManager->getRepository(Group::class)->find($groupId);
 
