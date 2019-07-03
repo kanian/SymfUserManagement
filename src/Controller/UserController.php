@@ -25,8 +25,12 @@ class UserController extends BaseController
      *
      */
     function list() {
-        $dtos = $this->domainService->list();
-        return new JsonResponse(["data" => $dtos], JsonResponse::HTTP_OK);
+        try {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+            $dtos = $this->domainService->list();
+            return new JsonResponse(["data" => $dtos], JsonResponse::HTTP_OK);} catch (Exception $e) {
+                return $this->sendServerError($e);
+        }
     }
     /**
      * @Route("/users/{id}", methods={"GET"})
@@ -34,6 +38,7 @@ class UserController extends BaseController
     public function retrieve($id)
     {
         try {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $dto = $this->domainService->retrieve($id);
             if (!$dto) {
                 return new JsonResponse(["error_human" => "Not found",
