@@ -27,6 +27,7 @@ class GroupController extends BaseController
      */
     function list() {
         try {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $dtos = $this->domainService->list();
             return new JsonResponse(["data" => $dtos], JsonResponse::HTTP_OK);
         } catch (Exception $e) {
@@ -38,6 +39,7 @@ class GroupController extends BaseController
     public function retrieve($id)
     {
         try {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $dto = $this->domainService->retrieve($id);
             if (!$dto) {
                 return new JsonResponse(["error_human" => "Not found",
