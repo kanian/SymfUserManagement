@@ -29,7 +29,7 @@ class UserController extends BaseController
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $dtos = $this->domainService->list();
             return new JsonResponse(["data" => $dtos], JsonResponse::HTTP_OK);} catch (Exception $e) {
-                return $this->sendServerError($e);
+            return $this->sendServerError($e);
         }
     }
     /**
@@ -58,8 +58,8 @@ class UserController extends BaseController
      */
     public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         try {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $body = json_decode(
                 $request->getContent());
             $dto = $this->domainService->create($body, $passwordEncoder);
@@ -76,6 +76,7 @@ class UserController extends BaseController
     public function update(string $id, Request $request)
     {
         try {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $body = json_decode(
                 $request->getContent());
             $dto = $this->domainService->update($id, $body);
@@ -96,6 +97,7 @@ class UserController extends BaseController
     public function delete(string $id)
     {
         try {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $deleted = $this->domainService->delete($id);
             if (!$deleted) {
                 return new JsonResponse(["error_human" => "Not found",
