@@ -82,7 +82,7 @@ class User implements UserInterface
     public function getRoles(): ?array
     {
         $roles = $this->roles;
-        if(!in_array('ROLE_USER',$this->roles)){
+        if (!in_array('ROLE_USER', $this->roles)) {
             $this->roles[] = 'ROLE_USER';
         }
 
@@ -98,9 +98,19 @@ class User implements UserInterface
 
     public function setRole(string $role): self
     {
-        if(!in_array($role,$this->roles)){
+        if (!in_array($role, $this->roles)) {
             $this->roles[] = $role;
         }
+        return $this;
+    }
+
+    public function removeRole(string $role): self
+    {
+        $filter = function ($r)  use($role) {
+            return $r !== $role;
+        };
+        $this->roles = array_filter($this->roles, $filter);
+
         return $this;
     }
 

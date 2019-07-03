@@ -1,12 +1,11 @@
 <?php
 
-// tests/Controller/PostControllerTest.php
 namespace App\Tests\Controller;
 
 use Symfony\Component\Dotenv\Dotenv;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class PostUserControllerTest extends WebTestCase
+class PostUserAdminControllerTest extends WebTestCase
 {
     protected function setup()
     {
@@ -14,21 +13,8 @@ class PostUserControllerTest extends WebTestCase
         $dotenv = new Dotenv();
         $dotenv->load(__DIR__ . '/../../.env.test');
         $base_uri = array_key_exists('BASE_URI',$_ENV) ? $_ENV['BASE_URI'] : '';
-        $client->request(
-            'POST',
-            $base_uri . '/users',
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json'],
-            '{
-                "name": "A User To Create",
-                "email": "testuser9876@gmail.com",
-                "password": "test.1234"
-            }'
-        );
-        $response = $client->getResponse();
-        $this->user = (json_decode($response->getContent()))->data;
-        $this->user->password = "test.1234";
+       
+        
         $client->request(
             'POST', 
             $base_uri . '/login',
@@ -36,11 +22,9 @@ class PostUserControllerTest extends WebTestCase
             [],
             ['CONTENT_TYPE' => 'application/json'],
             '{
-              "username": "testuser9876@gmail.com",
-              "password": "'.$this->user->password.'"}'
+              "username": "admin@example.com",
+              "password": "admin"}'
         );
-        $this->cookie = $client->getCookieJar()->get('MOCKSESSID');
-
     }
     protected function tearDown(){
         $client = static::createClient();
@@ -48,13 +32,6 @@ class PostUserControllerTest extends WebTestCase
         $dotenv->load(__DIR__ . '/../../.env.test');
         $base_uri = array_key_exists('BASE_URI',$_ENV) ? $_ENV['BASE_URI'] : '';
         
-        $client->request(
-            'DELETE',
-            $base_uri . '/users/'.$this->user->id,
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json']
-        );
         $client->request(
             'DELETE',
             $base_uri . '/users/'.$this->user2->id,
@@ -73,7 +50,6 @@ class PostUserControllerTest extends WebTestCase
     public function testCreate()
     {
         $client = static::createClient();
-        $client->getCookieJar()->set($this->cookie);
         $dotenv = new Dotenv();
         $dotenv->load(__DIR__ . '/../../.env.test');
         $base_uri = array_key_exists('BASE_URI',$_ENV) ? $_ENV['BASE_URI'] : '';

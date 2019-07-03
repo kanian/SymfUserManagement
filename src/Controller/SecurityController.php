@@ -1,23 +1,33 @@
 <?php
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Exception;
+use Psr\Log\LoggerInterface;
+use App\Controller\BaseController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class SecurityController extends AbstractController
+class SecurityController extends BaseController
 {
+    public function __construct(LoggerInterface $logger)
+    {
+        parent::__construct($logger);
+    }
     /**
      * @Route("/login", name="app_login", methods={"POST"})
      */
     public function login(Request $request)
     {
-        $user = $this->getUser();
+        try {
+            $user = $this->getUser();
 
-        return $this->json([
-            'username' => $user->getUsername(),
-            'roles' => $user->getRoles(),
-        ]);
+            return $this->json([
+                'username' => $user->getUsername(),
+                'roles' => $user->getRoles(),
+            ]);} catch (Exception $e) {
+            return $this->sendServerError($e);
+        }
     }
 
     /**
