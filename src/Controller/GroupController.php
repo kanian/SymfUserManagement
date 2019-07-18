@@ -2,15 +2,16 @@
 
 namespace App\Controller;
 
-use App\DomainService\GroupDomainService;
-use App\DomainService\UserDomainService;
-use App\Entity\Group;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use App\Entity\Group;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Controller\BaseController;
+use App\DomainService\UserDomainService;
+use Doctrine\ORM\EntityManagerInterface;
+use App\DomainService\GroupDomainService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class GroupController extends BaseController
 {
@@ -25,8 +26,10 @@ class GroupController extends BaseController
      *
      *
      */
-    function list() {
+    function list(Request $request) {
+       
         try {
+            $user = $this->getUser();
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $dtos = $this->domainService->list();
             return new JsonResponse(["data" => $dtos], JsonResponse::HTTP_OK);
@@ -77,6 +80,7 @@ class GroupController extends BaseController
     public function update(string $id, Request $request)
     {
         try {
+            
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $body = json_decode(
                 $request->getContent());
@@ -99,6 +103,7 @@ class GroupController extends BaseController
     public function delete(string $id)
     {
         try {
+            
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $deleted = $this->domainService->delete($id);
             if($deleted === GroupDomainService::GROUP_NOT_EMPTY){
