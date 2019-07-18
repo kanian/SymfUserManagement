@@ -7,7 +7,7 @@ use App\DTO\UserDTO;
 use App\Entity\User;
 use App\DomainService\DomainService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+//use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserDomainService extends DomainService
 {
@@ -17,16 +17,19 @@ class UserDomainService extends DomainService
         parent::__construct($entityManager, User::class);
     }
 
-    public function create($data, UserPasswordEncoderInterface $passwordEncoder)
+    public function create($data)
     {
         $user = new User();
         $user->setName($data->name);
         $user->setCreatedAt(new DateTime("now"));
         $user->setEmail($data->email);
-        $user->setPassword($passwordEncoder->encodePassword(
-            $user,
+        $user->setPassword(
             $data->password
-        ));
+            // $passwordEncoder->encodePassword(
+            // $user,
+            // $data->password
+            // )
+    );
         $this->entityManager->persist($user);
         $this->entityManager->flush();
         return new UserDTO($user);
