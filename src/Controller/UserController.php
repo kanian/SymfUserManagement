@@ -2,15 +2,15 @@
 
 namespace App\Controller;
 
-use App\DomainService\UserDomainService;
-use App\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use App\Entity\User;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\Controller\BaseController;
+use App\DomainService\UserDomainService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserController extends BaseController
 {
@@ -26,6 +26,7 @@ class UserController extends BaseController
      */
     function list() {
         try {
+            
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $dtos = $this->domainService->list();
             return new JsonResponse(["data" => $dtos], JsonResponse::HTTP_OK);} catch (Exception $e) {
@@ -38,6 +39,7 @@ class UserController extends BaseController
     public function retrieve($id)
     {
         try {
+            
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $dto = $this->domainService->retrieve($id);
             if (!$dto) {
@@ -56,13 +58,14 @@ class UserController extends BaseController
      * @Route("/users", methods={"POST"})
      *
      */
-    public function create(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function create(Request $request)
     {
         try {
+            
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $body = json_decode(
                 $request->getContent());
-            $dto = $this->domainService->create($body, $passwordEncoder);
+            $dto = $this->domainService->create($body);
             return new JsonResponse(['data' => $dto], JsonResponse::HTTP_CREATED);
         } catch (Exception $e) {
             return $this->sendServerError($e);
@@ -76,6 +79,7 @@ class UserController extends BaseController
     public function update(string $id, Request $request)
     {
         try {
+            
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $body = json_decode(
                 $request->getContent());
@@ -97,6 +101,7 @@ class UserController extends BaseController
     public function delete(string $id)
     {
         try {
+            
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
             $deleted = $this->domainService->delete($id);
             if (!$deleted) {
