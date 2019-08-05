@@ -13,7 +13,7 @@ $ ./bin/console doctrine:migrations:migrate
 $ ./bin/console doctrine:fixtures:load
 ```
 To login:
-``
+```
 Example using Symfony 4 :
 
 use Symfony\Component\HttpClient\HttpClient;
